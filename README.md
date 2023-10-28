@@ -1,10 +1,28 @@
 # my_plants
 
-Watering plants reminder app
+Watering plants reminder app - a Flutter playground project
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+When clicking on the button, the application saves the last watering time in the shared preferences, 
+and shows the last saved watering time on the UI.
+Also, the plant image changes when watering is due.
+
+## Run the project
+
+- You can either run the project in Android Studio
+- Or run in your browser with [Zapp](https://zapp.run) by copy-pasting the content of the MyApp.dart file
+
+## Tips & tricks
+
+Some ideas for playing around:
+- [style the last watering text](https://api.flutter.dev/flutter/painting/TextStyle-class.html)
+- show a text indicating the next watering time
+- change the button (text, color, enabled, etc.) based on the due watering time
+- add another plant with a different watering time
+- [show a notification when next watering is due](https://pub.dev/packages/flutter_local_notifications)
+
+## Getting Started with Flutter
 
 A few resources to get you started if this is your first Flutter project:
 
