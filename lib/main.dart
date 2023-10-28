@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen.shade50),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -55,17 +56,77 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
+  DateTime? lastWateringDate = null;
+  String lastWateringDateString = "No saved watering yet";
+
+  String happyPlantUrl = "https://cdn-icons-png.flaticon.com/512/1892/1892751.png";
+  String sadPlantUrl = "https://cdn-icons-png.flaticon.com/512/4147/4147924.png";
+
+  getSavedDate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? dateString = (prefs.getString('date'));
+    if (dateString != null) {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+      // so that the display can reflect the updated values.
+      setState(() {
+        // Transform the text format (that we used to store the date info)
+        // into DateTime format, so we can access parts of it (year, month, etc.)
+        lastWateringDate = DateTime.tryParse(dateString);
+        print("getSavedDate: lastWateringDate = $lastWateringDate");
+      });
+    }
+  }
+
+  void saveCurrentDate() async {
+    var now = DateTime.now().toLocal();
+    // Save the date in the local storage of the application
+    // (it's called "SharedPreferences" because usually it's used to store the user's preference settings)
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('date', now.toString());
+    getSavedDate();
+  }
+
+  String getDateTextToShow(DateTime? date) {
+    var textToShow = "";
+
+    if (date == null) {
+      // Show this text if there is no date to be shown
+      textToShow = "No saved watering yet";
+    } else {
+      // Otherwise use the date to create the text:
+      var year = date.year;
+      var month = date.month;
+      var day = date.day;
+      textToShow = "Last watering: $day/$month/$year";
+    }
+
+    return textToShow;
+  }
+
+  String getImageUrl(DateTime? lastWateringDate) {
+    if (lastWateringDate == null) {
+      // Return the black & white image if there is no date saved yet
+      return sadPlantUrl;
+    } else {
+      // Calculate the next time when watering is due
+      var nextWateringDate = lastWateringDate.add(Duration(seconds: 10));
+      print("nextWateringDate = $nextWateringDate");
+      // Return the colored image if we haven't reached the next watering date,
+      // or the black & white image if plant needs watering
+      if (DateTime.now().isBefore(nextWateringDate)) {
+        return happyPlantUrl;
+      } else {
+        return sadPlantUrl;
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getSavedDate();
   }
 
   @override
@@ -93,33 +154,32 @@ class _MyHomePageState extends State<MyHomePage> {
           // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
           // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
             Text(
-              '$_counter',
+              getDateTextToShow(lastWateringDate),
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            SizedBox(height: 24),
+            Image.network(
+              getImageUrl(lastWateringDate),
+              width: 120,
+            ),
+            SizedBox(height: 24),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.lightGreen,
+                elevation: 0,
+              ),
+              onPressed: () {
+                saveCurrentDate();
+              },
+              child:
+                  Text("Water my plant", style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
