@@ -87,6 +87,7 @@ class MyHomePageState extends State<MyHomePage> {
       var year = date.year;
       var month = date.month;
       var day = date.day;
+      // TODO: show watering time (hour and minute) too
       textToShow = "Last watering: $day/$month/$year";
     }
     return textToShow;
@@ -97,6 +98,7 @@ class MyHomePageState extends State<MyHomePage> {
       // Return the black & white image if there is no date saved yet
       return sadPlantUrl;
     } else {
+      // TODO: change watering time frequency to 10 seconds for testing
       // Calculate the next time when watering is due
       var nextWateringDate = lastWateringDate.add(Duration(days: 5));
       print("nextWateringDate = $nextWateringDate");
