@@ -16,11 +16,18 @@ Also, the plant image changes when watering is due.
 ## Tips & tricks
 
 Some ideas for playing around:
-- [style the last watering text](https://api.flutter.dev/flutter/painting/TextStyle-class.html)
 - show a text indicating the next watering time
 - change the button (text, color, enabled, etc.) based on the due watering time
+- [customise your font](https://docs.flutter.dev/cookbook/design/fonts)
+- [add images and modify their properties](https://flutterassets.com/basics-how-to-use-an-image-in-flutter/)
+- [create spaces between elements](https://www.educative.io/answers/how-to-add-padding-in-flutter)
+- [color your background](https://www.tutorialkart.com/flutter/flutter-container-color/#gsc.tab=0)
+- [change the position of visual elements with rows and columns](https://www.educative.io/answers/nesting-rows-and-columns-in-flutter)
+- [display your elements with a list or a grid](https://medium.com/flutterfly-tech/flutter-listview-gridview-ce7177812b1d)
+- [style the last watering text](https://api.flutter.dev/flutter/painting/TextStyle-class.html)
 - add another plant with a different watering time
 - [show a notification when next watering is due](https://pub.dev/packages/flutter_local_notifications)
+
 
 ## Getting Started with Flutter
 
