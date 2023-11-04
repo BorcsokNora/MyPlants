@@ -68,7 +68,7 @@ class MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void saveCurrentDate() async {
+  saveCurrentDate() async {
     var now = DateTime.now().toLocal();
     // Save the date in the local storage of the application
     // (it's called "SharedPreferences" because usually it's used to store the user's preference settings)
@@ -98,7 +98,7 @@ class MyHomePageState extends State<MyHomePage> {
       return sadPlantUrl;
     } else {
       // Calculate the next time when watering is due
-      var nextWateringDate = lastWateringDate.add(Duration(seconds: 10));
+      var nextWateringDate = lastWateringDate.add(Duration(days: 5));
       print("nextWateringDate = $nextWateringDate");
       // Return the colored image if we haven't reached the next watering date,
       // or the black & white image if plant needs watering
@@ -112,7 +112,7 @@ class MyHomePageState extends State<MyHomePage> {
 
   // Get the saved date when the UI is initialized
   @override
-  void initState() {
+  initState() {
     super.initState();
     getSavedDate();
   }
